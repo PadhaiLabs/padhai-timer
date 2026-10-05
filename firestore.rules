@@ -1,0 +1,48 @@
+rules_version = '2';
+// STEP 4 of the guide: copy everything in this file into
+// Firebase console → Firestore Database → Rules, then press "Publish".
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isMe(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Each person's own study log. Only they can read or change it.
+    match /users/{uid} {
+      allow read, write: if isMe(uid);
+    }
+
+    // Study hall: everyone signed in can see nickname, exam and today's time.
+    // People can only write their own row, and the values must look sane.
+    match /hall/{uid} {
+      allow read: if signedIn();
+      allow create, update: if isMe(uid) && validHall(request.resource.data);
+      allow delete: if isMe(uid);
+    }
+
+    function validHall(d) {
+      return d.keys().hasOnly(['nick','exam','day','base','studying','subject','since','at','groups'])
+        && d.nick is string && d.nick.size() > 0 && d.nick.size() <= 24
+        && d.exam is string && d.exam.size() <= 10
+        && d.day is string && d.day.size() == 10
+        && d.base is number && d.base >= 0 && d.base <= 57600
+        && d.studying is bool
+        && (d.subject == null || (d.subject is string && d.subject.size() <= 30))
+        && (d.since == null || (d.since is number && d.since <= request.time.toMillis() + 120000))
+        && d.groups is list && d.groups.size() <= 5;
+    }
+
+    // Study groups: a name and who made it. Anyone signed in can look one up by code.
+    // A group can be created once and never overwritten.
+    match /groups/{code} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && code.size() == 6
+        && request.resource.data.keys().hasOnly(['name','createdBy','createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 40
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update, delete: if false;
+    }
+  }
+}

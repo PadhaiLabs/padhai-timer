@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Padhai Timer</title>
+<meta name="description" content="Study timer for NEET, JEE, UPSC, SSC and Bank aspirants. Track every subject, fill your 10-minute planner and study live with friends.">
+<meta name="theme-color" content="#2742B5">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta property="og:title" content="Padhai Timer">
+<meta property="og:description" content="Study together. Track every minute. NEET · JEE · UPSC · SSC · Bank · CA">
+<meta property="og:image" content="https://padhai-timer.netlify.app/icons/icon-512.png">
+<meta property="og:url" content="https://padhai-timer.netlify.app/">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+        <rect x="2" y="2" width="40" height="40" rx="11" fill="var(--blue)"/>
+        <circle cx="22" cy="23" r="12" fill="none" stroke="var(--surface)" stroke-width="3"/>
+        <path d="M22 16v7l5 3" fill="none" stroke="var(--marigold)" stroke-width="3" stroke-linecap="round"/>
+        <rect x="18" y="6" width="8" height="4" rx="2" fill="var(--surface)"/>
+      </svg>
+      <div>
+        <h1>Padhai Timer</h1>
+        <p id="tagline">Study together. Track every minute.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <select id="exam" class="select" aria-label="Exam"></select>
+      <select id="lang" class="select" aria-label="Language"></select>
+      <button type="button" class="chip guide-open" id="guideOpen" hidden></button>
+      <button type="button" class="chip install" id="installBtn" hidden></button>
+    </div>
+  </header>
+
+  <div id="demoNote" class="demo" hidden></div>
+
+  <div id="sampleBanner" class="banner" hidden>
+    <span id="sampleText"></span>
+    <button type="button" class="linkbtn" id="clearSample"></button>
+  </div>
+
+  <main class="grid">
+    <section class="card guide span" id="guide" aria-labelledby="guideTitle">
+      <div class="head">
+        <h2 id="guideTitle"></h2>
+        <button type="button" class="btn ghost" id="guideHide"></button>
+      </div>
+      <ol class="steps" id="steps"></ol>
+    </section>
+
+    <section class="card timer" aria-labelledby="todayLabel">
+      <div class="chips">
+        <button type="button" class="chip dday" id="ddayChip"></button>
+        <span class="chip streak" id="streakChip"></span>
+      </div>
+      <p class="today-label" id="todayLabel"></p>
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="now" id="nowLine"></div>
+      <button type="button" class="big" id="mainBtn"></button>
+      <ul class="subjects" id="subjects"></ul>
+    </section>
+
+    <section class="card" aria-labelledby="hallTitle">
+      <div class="head">
+        <div>
+          <h2 id="hallTitle"></h2>
+          <p class="sub" id="hallSub"></p>
+        </div>
+        <span class="ist" id="istClock"></span>
+      </div>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabGroup" aria-selected="true"></button>
+        <button type="button" role="tab" id="tabAll" aria-selected="false"></button>
+      </div>
+
+      <div id="groupPanel">
+        <div class="group-bar" id="groupBar" hidden>
+          <select id="groupSel" class="select" aria-label="Group"></select>
+          <span class="code" id="groupCode"></span>
+          <button type="button" class="btn wa small" id="shareWA"></button>
+          <button type="button" class="btn ghost small" id="copyCode"></button>
+          <button type="button" class="btn ghost small" id="leaveGroup"></button>
+          <button type="button" class="btn ghost small" id="addGroup"></button>
+        </div>
+        <div class="group-empty" id="groupEmpty">
+          <p id="groupNone"></p>
+          <form class="row-form" id="createForm">
+            <input class="input" id="groupName" maxlength="40" aria-label="Group name">
+            <button class="btn" type="submit" id="createBtn"></button>
+          </form>
+          <form class="row-form" id="joinForm">
+            <input class="input" id="joinCode" maxlength="6" autocapitalize="characters" autocomplete="off" aria-label="Invite code">
+            <button class="btn ghost" type="submit" id="joinBtn"></button>
+          </form>
+          <p class="err" id="groupErr" hidden></p>
+        </div>
+      </div>
+
+      <div class="live-count" id="liveWrap"><span class="pulse" aria-hidden="true"></span><span id="liveCount"></span></div>
+      <ol class="hall-list" id="hallList"></ol>
+      <p class="note" id="hallNote"></p>
+      <form class="nickform" id="nickForm">
+        <label for="nick" id="nickLabel"></label>
+        <input class="input" id="nick" maxlength="24" autocomplete="nickname">
+        <button class="btn" type="submit" id="nickSave"></button>
+        <p class="err" id="nickErr" hidden></p>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="planTitle">
+      <div class="head"><div><h2 id="planTitle"></h2><p class="sub" id="planSub"></p></div></div>
+      <div class="planner-wrap"><div class="planner" id="planner"></div></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="card weekbox" aria-labelledby="weekTitle">
+      <div class="head"><div><h2 id="weekTitle"></h2><p class="sub" id="weekSub"></p></div></div>
+      <div id="weekChart"></div>
+    </section>
+
+    <section class="card span" id="settingsCard" aria-labelledby="setTitle">
+      <div class="head"><h2 id="setTitle"></h2></div>
+      <div class="settings">
+        <div class="field">
+          <label for="examDate" id="examDateLabel"></label>
+          <input type="date" class="input" id="examDate">
+        </div>
+        <div class="field account" id="accountBox">
+          <label id="accountLabel"></label>
+          <p id="accountNote"></p>
+          <div class="row-form">
+            <button type="button" class="btn" id="googleBtn"></button>
+            <button type="button" class="btn ghost" id="signOutBtn" hidden></button>
+          </div>
+        </div>
+        <div class="field">
+          <label id="resetLabel"></label>
+          <div><button type="button" class="btn ghost" id="resetBtn"></button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p id="footer"></p>
+    <p class="links" style="justify-content:center"><a href="privacy.html" id="privacyLink"></a><a href="terms.html" id="termsLink"></a></p>
+  </footer>
+</div>
+
+<!-- first-run consent -->
+<div class="modal-back" id="consent" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+    <h2 id="consentTitle"></h2>
+    <p id="consentText"></p>
+    <label class="check"><input type="checkbox" id="consentAge"><span id="consentAgeText"></span></label>
+    <div class="links"><a href="privacy.html" target="_blank" rel="noopener" id="cPrivacy"></a><a href="terms.html" target="_blank" rel="noopener" id="cTerms"></a></div>
+    <button type="button" class="big" id="consentAgree" disabled></button>
+  </div>
+</div>
+
+<!-- still studying check -->
+<div class="modal-back" id="checkModal" hidden>
+  <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="checkTitle">
+    <h2 id="checkTitle"></h2>
+    <p id="checkText"></p>
+    <div class="countdown" id="checkCount">5:00</div>
+    <button type="button" class="big" id="checkYes"></button>
+  </div>
+</div>
+
+<!-- invite link join -->
+<div class="modal-back" id="inviteModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="inviteTitle">
+    <h2 id="inviteTitle"></h2>
+    <div class="row-form">
+      <button type="button" class="btn" id="inviteYes"></button>
+      <button type="button" class="btn ghost" id="inviteNo"></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="clock.js"></script>
+<script src="firebase-config.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
