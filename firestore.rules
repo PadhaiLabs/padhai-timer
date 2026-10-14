@@ -44,5 +44,65 @@ service cloud.firestore {
         && request.resource.data.createdBy == request.auth.uid;
       allow update, delete: if false;
     }
+
+    // Suggestions from the homepage. Anyone signed in (anonymous is fine) can send one.
+    // Only the Padhai Labs admin account can read or delete them. Nobody can edit them.
+    function isAdmin() {
+      return signedIn() && request.auth.token.email == 'padhai4018@gmail.com'
+        && request.auth.token.email_verified == true;
+    }
+    match /inquiries/{id} {
+      allow create: if signedIn() && validInquiry(request.resource.data);
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+    function validInquiry(d) {
+      return d.keys().hasOnly(['role','topic','message','lang','src','uid','at'])
+        && d.role in ['student','parent','teacher','other']
+        && d.topic in ['idea','bug','question','other']
+        && d.message is string && d.message.size() > 0 && d.message.size() <= 2000
+        && d.lang is string && d.lang.size() <= 5
+        && d.src is string && d.src.size() <= 40
+        && d.uid == request.auth.uid
+        && d.at == request.time;
+    }
+
+    // Community posts (homepage "Community" tab and the app's community button).
+    // Anyone signed in can post; bad words, links and phone numbers are refused here too.
+    match /posts/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && validPost(request.resource.data)
+        && getAfter(/databases/$(database)/documents/posters/$(request.auth.uid)).data.last == request.time;
+      allow delete: if signedIn() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if signedIn() && onlyReactions();
+    }
+    function validPost(d) {
+      return d.keys().hasOnly(['nick','exam','text','uid','at','likes','reporters','kind'])
+        && (!('kind' in d) || d.kind in ['chat','info'])
+        && d.nick is string && d.nick.size() > 0 && d.nick.size() <= 24
+        && d.exam in ['neet','jee','upsc','ssc','bank','ca','board','other']
+        && d.text is string && d.text.size() > 0 && d.text.size() <= 300
+        && !d.text.lower().matches('.*(https?:|www[.]|t[.]me|wa[.]me|[.](com|in|net|org|ly|me|io|xyz)( |$)|[0-9]{8,}|fuck|madarchod|bhenchod|behenchod|chutiya|bhosd|randi|मादरचोद|भेनचोद|बहनचोद|चूतिया|रंडी).*')
+        && !d.nick.lower().matches('.*(admin|official|moderator|padhai|fuck|chutiya|madarchod|bhenchod).*')
+        && d.uid == request.auth.uid && d.at == request.time
+        && d.likes.size() == 0 && d.reporters.size() == 0;
+    }
+    // Likes: add or remove only yourself. Reports: add only yourself, never remove.
+    function onlyReactions() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes','reporters'])
+        && request.resource.data.likes.size() <= 1000 && request.resource.data.reporters.size() <= 100
+        && request.resource.data.likes.toSet().difference(resource.data.likes.toSet())
+             .union(resource.data.likes.toSet().difference(request.resource.data.likes.toSet()))
+             .hasOnly([request.auth.uid])
+        && request.resource.data.reporters.toSet().difference(resource.data.reporters.toSet()).hasOnly([request.auth.uid])
+        && resource.data.reporters.toSet().difference(request.resource.data.reporters.toSet()).size() == 0;
+    }
+    // One post every 30 seconds per person.
+    match /posters/{uid} {
+      allow read: if isMe(uid);
+      allow create: if isMe(uid) && request.resource.data.keys().hasOnly(['last']) && request.resource.data.last == request.time;
+      allow update: if isMe(uid) && request.resource.data.keys().hasOnly(['last']) && request.resource.data.last == request.time
+        && resource.data.last < request.time - duration.value(30, 's');
+    }
   }
 }

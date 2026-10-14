@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chat · Padhai Timer</title>
+<meta name="description" content="Say anything about your study day: a small win, a doubt, a tough day. Keep it kind. Bad words, phone numbers and links are blocked automatically, and posts disappear after 30 days.">
+<meta name="theme-color" content="#2742B5">
+<meta property="og:title" content="Chat · Padhai Timer">
+<meta property="og:description" content="Say anything about your study day: a small win, a doubt, a tough day. Keep it kind. Bad words, phone numbers and links are blocked automatically, and posts disappear after 30 days.">
+<meta property="og:image" content="https://padhaitimer.com/icons/icon-512.png">
+<meta property="og:url" content="https://padhaitimer.com/home/community.html">
+<meta property="og:type" content="website">
+<link rel="icon" href="../icons/icon-192.png">
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Mukta:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="../home/home.css?v=30">
+<script src="../clock.js?v=30"></script>
+<script src="../firebase-config.js?v=30"></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="../home/"><img src="../icons/icon-192.png" alt=""> Padhai Timer</a>
+    <select id="lang" aria-label="Language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="ko">한국어</option></select>
+    <a class="btn primary small openTop" href="../" data-t="navOpen">Open the app</a>
+  </div>
+  <nav class="wrap menu" aria-label="Menu"><a href="../home/how.html" data-t="navHow">How it works</a><a href="../home/why.html" data-t="navWhy">Why Padhai Timer</a><a href="../home/stories.html" data-t="navStories">Stories</a><a href="../home/community.html" aria-current="page" data-t="navCommunity">Chat</a><a class="install" href="../install.html" data-t="navInstall">📱 Install on phone</a></nav>
+</header>
+<main>
+<section class="wrap narrow">
+  <h1 data-t="comT">Aspirant lounge: talk with others on the same road</h1><p data-t="comIntro" class="lead">Say anything about your study day: a small win, a doubt, a tough day. Keep it kind. Bad words, phone numbers and links are blocked automatically, and posts disappear after 30 days.</p>
+  <div id="community"></div>
+</section>
+<script src="../home/filter.js?v=30"></script>
+<script src="../community-text.js?v=30"></script>
+<script src="../community.js?v=30"></script>
+<script>PadhaiCommunity.mount(document.getElementById("community"), {signIn: true});</script>
+</main>
+<footer><div class="wrap">
+  <span>© 2026 Padhai Labs</span>
+  <nav><a href="../home/contact.html" data-t="navContact">Suggestions</a><a href="../privacy.html" data-t="privacy">Privacy</a><a href="../terms.html" data-t="terms">Terms</a></nav>
+</div></footer>
+<script src="../home/i18n.js?v=30"></script>
+<script src="../install-sheet.js?v=30"></script>
+<script src="../home/home.js?v=30"></script>
+</body>
+</html>

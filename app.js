@@ -62,7 +62,9 @@ function freshState(sample){
 }
 function loadLocal(){ try { const r = localStorage.getItem(KEY); return r ? JSON.parse(r) : null; } catch(e){ return null; } }
 function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
-let S = Object.assign(freshState(true), loadLocal() || {});
+let S = Object.assign(freshState(false), loadLocal() || {});
+// The old sample week is no longer used. Remove it for anyone who still has it.
+if (S.sample){ S.log = {}; S.sample = false; }
 if (!EXAMS[S.exam]) S.exam = "neet";
 if (!T[S.lang]) S.lang = "en";
 if (!Array.isArray(S.groups)) S.groups = [];
@@ -124,7 +126,7 @@ const B = {
       const base = "https://www.gstatic.com/firebasejs/"+FB_VER+"/";
       const [app, auth, fs] = await Promise.all([import(base+"firebase-app.js"), import(base+"firebase-auth.js"), import(base+"firebase-firestore.js")]);
       this.fb = {app, auth, fs};
-      const a = app.initializeApp(window.PADHAI_FIREBASE);
+      const a = app.getApps().length ? app.getApp() : app.initializeApp(window.PADHAI_FIREBASE);
       this.auth = auth.getAuth(a); this.db = fs.getFirestore(a);
       try { await auth.getRedirectResult(this.auth); } catch(e){ if (e && e.code === "auth/credential-already-in-use") await this.switchToGoogle(e); }
       auth.onAuthStateChanged(this.auth, async user => {
@@ -307,7 +309,7 @@ function buildStatic(){
   $("#examDate").value = S.examDate || "";
   if (document.activeElement !== $("#nick")) $("#nick").value = S.nick || "";
   $("#nick").placeholder = defaultNick();
-  $("#guide").hidden = !!S.guideHidden; $("#guideOpen").hidden = !S.guideHidden;
+  $("#guide").hidden = false; $("#guideOpen").hidden = true;  // the guide lives in the "How to use" tab now
   const st = $("#steps"); st.textContent = "";
   t.steps.forEach((x, i) => { const li = el("li"), d = el("div"); li.appendChild(el("span","num",String(i+1))); d.append(el("h3",null,x[0]), el("p",null,x[1])); li.appendChild(d); st.appendChild(li); });
   renderAccount();
@@ -571,9 +573,12 @@ $("#consentAgree").addEventListener("click", () => {
 });
 
 /* install as app */
-let installEvt = null;
-window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installEvt = e; $("#installBtn").hidden = false; });
-$("#installBtn").addEventListener("click", async () => { if (!installEvt) return; installEvt.prompt(); try { await installEvt.userChoice; } catch(e){} installEvt = null; $("#installBtn").hidden = true; });
+// Computer: "📱 Install on phone" opens a QR code. Phone: the browser's own install box (or the guide page on iPhone).
+const PI = window.PadhaiInstall;
+if (PI){
+  if (PI.desktop || !PI.standalone) $("#installBtn").hidden = false;
+  $("#installBtn").addEventListener("click", () => { if (!PI.install()) location.href = "install.html"; });
+}
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")){
   navigator.serviceWorker.register("sw.js").catch(()=>{});
 }

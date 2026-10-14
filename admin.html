@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Padhai Timer 관리</title>
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  [hidden]{display:none!important}
+  :root{--paper:#F3F6FB;--surface:#fff;--ink:#14213F;--ink-2:#4B5878;--rule:#DDE4F0;--blue:#2742B5;--bad:#B23B3B;--good:#1D8757}
+  @media (prefers-color-scheme:dark){:root{--paper:#0D1322;--surface:#151D31;--ink:#E7ECF7;--ink-2:#A1ACC6;--rule:#243052;--blue:#8EA1FF;--bad:#F08080;--good:#4CC48B;color-scheme:dark}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,"Noto Sans KR",sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:16px}
+  h1{font-size:1.5rem;margin:8px 0 16px}
+  button{font:inherit;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);cursor:pointer}
+  button.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0}
+  .stat{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:12px}
+  .stat b{display:block;font-size:1.6rem}
+  .msg{background:var(--surface);border:1px solid var(--rule);border-radius:12px;padding:14px;margin-top:10px}
+  .meta{color:var(--ink-2);font-size:.88rem;display:flex;flex-wrap:wrap;gap:8px 14px}
+  .tag{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--paper);border:1px solid var(--rule);font-size:.82rem}
+  .body{white-space:pre-wrap;word-break:break-word;margin:8px 0}
+  .err{color:var(--bad);font-weight:600}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Padhai Timer 관리 화면</h1>
+  <div id="out">
+    <p>Padhai Labs 관리자 Google 계정(padhai4018@gmail.com)으로 로그인하면 의견(요청사항)을 볼 수 있어요.</p>
+    <button class="primary" id="login">Google로 로그인</button>
+  </div>
+  <div id="in" hidden>
+    <div class="row"><span id="who"></span><button id="refresh">새로고침</button><button id="logout">로그아웃</button></div>
+    <div class="stats">
+      <div class="stat">오늘 공부한 사람 (인도 날짜)<b id="nHall">–</b></div>
+      <div class="stat">최근 7일 공부한 사람<b id="nWeek">–</b></div>
+      <div class="stat">최근 30일 공부한 사람<b id="nMonth">–</b></div>
+      <div class="stat">지금까지 타이머를 써 본 사람<b id="nAll">–</b></div>
+      <div class="stat">만들어진 그룹<b id="nGroups">–</b></div>
+      <div class="stat">소통 글 (최근 30일)<b id="nPosts">–</b></div>
+      <div class="stat">의견<b id="nInq">–</b></div>
+    </div>
+    <p style="color:var(--ink-2);font-size:.88rem;margin-top:-6px">"공부한 사람"은 타이머를 한 번이라도 켠 기기 수예요. 같은 사람이 폰과 컴퓨터를 쓰면 2명으로 셀 수 있어요.</p>
+    <h2 style="font-size:1.15rem">소통방 글 (최근 30일) · 욕설·링크·번호는 자동 차단, 신고 3번이면 자동 숨김. 매일 볼 필요 없어요</h2>
+    <div id="slist"></div>
+    <h2 style="font-size:1.15rem">의견 (최신순) · 매주 모아서 업데이트에 반영</h2>
+    <div id="list"></div>
+  </div>
+  <p id="err" class="err"></p>
+</div>
+<script src="clock.js?v=30"></script>
+<script src="firebase-config.js?v=30"></script>
+<script type="module">
+const FB = "https://www.gstatic.com/firebasejs/10.12.2/";
+const { initializeApp } = await import(FB + "firebase-app.js");
+const A = await import(FB + "firebase-auth.js");
+const F = await import(FB + "firebase-firestore.js");
+const $ = id => document.getElementById(id);
+const err = m => $("err").textContent = m || "";
+if (!window.PADHAI_FIREBASE) { err("firebase-config.js가 비어 있어요 (데모 모드)."); throw 0; }
+// A separate app name keeps the admin login apart from the timer app's login on this browser.
+const app = initializeApp(window.PADHAI_FIREBASE, "padhai-admin");
+const auth = A.getAuth(app), db = F.getFirestore(app);
+const ROLE = {student:"학생", parent:"부모", teacher:"선생님/학원", other:"기타"};
+const TOPIC = {idea:"기능 요청", bug:"잘 안 돼요", question:"사용 방법", other:"기타"};
+const fmt = (d, tz) => new Intl.DateTimeFormat("ko-KR", {timeZone: tz, month:"numeric", day:"numeric", hour:"2-digit", minute:"2-digit"}).format(d);
+const istDay = () => new Intl.DateTimeFormat("en-CA", {timeZone:"Asia/Kolkata", year:"numeric", month:"2-digit", day:"2-digit"}).format(new Date());
+
+$("login").onclick = async () => {
+  err();
+  try { await A.signInWithPopup(auth, new A.GoogleAuthProvider()); }
+  catch (e) { err("로그인 실패 (" + (e.code || e.message) + ")"); }
+};
+$("logout").onclick = () => A.signOut(auth);
+$("refresh").onclick = () => load();
+
+A.onAuthStateChanged(auth, u => {
+  const ok = u && !u.isAnonymous;
+  $("out").hidden = !!ok; $("in").hidden = !ok;
+  if (ok) { $("who").textContent = u.email; load(); }
+});
+
+async function load() {
+  err(); $("list").textContent = "불러오는 중…";
+  try {
+    const snap = await F.getDocs(F.query(F.collection(db, "inquiries"), F.orderBy("at", "desc"), F.limit(200)));
+    $("nInq").textContent = snap.size;
+    const list = $("list"); list.textContent = "";
+    if (!snap.size) list.textContent = "아직 의견이 없어요.";
+    snap.forEach(d => {
+      const v = d.data(), at = v.at && v.at.toDate ? v.at.toDate() : null;
+      const box = document.createElement("div"); box.className = "msg";
+      const meta = document.createElement("div"); meta.className = "meta";
+      const add = (t, cls) => { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = t; meta.appendChild(s); };
+      add(at ? "한국 " + fmt(at, "Asia/Seoul") + " · 인도 " + fmt(at, "Asia/Kolkata") : "시간 없음");
+      add(ROLE[v.role] || v.role, "tag"); add(TOPIC[v.topic] || v.topic, "tag");
+      if (v.lang) add("언어 " + v.lang, "tag"); if (v.src) add("유입 " + v.src, "tag");
+      const body = document.createElement("div"); body.className = "body"; body.textContent = v.message || "";
+      const foot = document.createElement("div"); foot.className = "meta";
+      const del = document.createElement("button"); del.textContent = "삭제";
+      del.onclick = async () => { if (!confirm("이 의견을 지울까요?")) return; try { await F.deleteDoc(d.ref); box.remove(); } catch (e) { err("삭제 실패 (" + (e.code || e.message) + ")"); } };
+      foot.appendChild(del);
+      box.append(meta, body, foot); list.appendChild(box);
+    });
+  } catch (e) {
+    $("list").textContent = "";
+    err("의견을 못 읽었어요 (" + (e.code || e.message) + "). 관리자 계정인지, Firestore 규칙을 게시했는지 확인하세요.");
+  }
+  try {
+    const since = F.Timestamp.fromMillis(Date.now() - 30*864e5);
+    const ss = await F.getDocs(F.query(F.collection(db, "posts"), F.where("at", ">", since), F.orderBy("at", "desc"), F.limit(200)));
+    const sl = $("slist"); sl.textContent = ss.size ? "" : "최근 30일 글이 없어요.";
+    ss.forEach(d => {
+      const v = d.data(), at = v.at && v.at.toDate ? v.at.toDate() : null, nrep = (v.reporters || []).length;
+      const box = document.createElement("div"); box.className = "msg";
+      const meta = document.createElement("div"); meta.className = "meta";
+      const add = (t, cls) => { const s = document.createElement("span"); if (cls) s.className = cls; s.textContent = t; meta.appendChild(s); };
+      add(at ? "한국 " + fmt(at, "Asia/Seoul") + " · 인도 " + fmt(at, "Asia/Kolkata") : "시간 없음");
+      add(v.nick, "tag"); add(v.exam, "tag"); add(v.kind === "info" ? "📚 정보" : "💬 수다", "tag"); add("❤️ " + (v.likes || []).length, "tag");
+      if (nrep) add("🚩 신고 " + nrep + (nrep >= 3 ? " (숨김)" : ""), "tag");
+      const body = document.createElement("div"); body.className = "body"; body.textContent = v.text || "";
+      const del = document.createElement("button"); del.textContent = "삭제";
+      del.onclick = async () => { if (!confirm("이 글을 지울까요?")) return; try { await F.deleteDoc(d.ref); box.remove(); } catch (e) { err("삭제 실패 (" + (e.code || e.message) + ")"); } };
+      box.append(meta, body, del); sl.appendChild(box);
+    });
+  } catch (e) { $("slist").textContent = "글을 못 읽었어요 (" + (e.code || e.message) + ")"; }
+  try {
+    const h = await F.getCountFromServer(F.query(F.collection(db, "hall"), F.where("day", "==", istDay())));
+    $("nHall").textContent = h.data().count;
+    const g = await F.getCountFromServer(F.collection(db, "groups"));
+    $("nGroups").textContent = g.data().count;
+    const hall = F.collection(db, "hall"), cnt = async q => (await F.getCountFromServer(q)).data().count;
+    $("nWeek").textContent = await cnt(F.query(hall, F.where("at", ">", Date.now() - 7*864e5)));
+    $("nMonth").textContent = await cnt(F.query(hall, F.where("at", ">", Date.now() - 30*864e5)));
+    $("nAll").textContent = await cnt(hall);
+    $("nPosts").textContent = await cnt(F.query(F.collection(db, "posts"), F.where("at", ">", F.Timestamp.fromMillis(Date.now() - 30*864e5))));
+  } catch (e) { ["nHall","nWeek","nMonth","nAll","nGroups","nPosts"].forEach(id => { if ($(id).textContent === "–") $(id).textContent = "?"; }); }
+}
+</script>
+</body>
+</html>

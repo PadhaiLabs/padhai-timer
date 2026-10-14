@@ -11,13 +11,13 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta property="og:title" content="Padhai Timer">
 <meta property="og:description" content="Study together. Track every minute. NEET · JEE · UPSC · SSC · Bank · CA">
-<meta property="og:image" content="https://padhai-timer.netlify.app/icons/icon-512.png">
-<meta property="og:url" content="https://padhai-timer.netlify.app/">
+<meta property="og:image" content="https://padhaitimer.com/icons/icon-512.png">
+<meta property="og:url" content="https://padhaitimer.com/">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mukta:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=30">
 </head>
 <body>
 <div class="app">
@@ -42,6 +42,12 @@
     </div>
   </header>
 
+  <nav class="apptabs" aria-label="Menu">
+    <a href="#" data-view="timer" aria-current="page">⏱ Timer</a>
+    <a href="#chat" data-view="chat">💬 Chat</a>
+    <a href="#how" data-view="how">📖 How to use</a>
+  </nav>
+
   <div id="demoNote" class="demo" hidden></div>
 
   <div id="sampleBanner" class="banner" hidden>
@@ -49,14 +55,25 @@
     <button type="button" class="linkbtn" id="clearSample"></button>
   </div>
 
-  <main class="grid">
+  <section class="view" id="viewChat" hidden>
+    <h2 class="view-title" id="chatTitle"></h2>
+    <p class="view-lead" id="chatLead"></p>
+    <div id="community"></div>
+  </section>
+
+  <section class="view" id="viewHow" hidden>
+    <div class="card guide-card" id="howMount"></div>
+  </section>
+  <!-- old guide box, kept hidden only because app.js still fills it -->
+  <div hidden>
     <section class="card guide span" id="guide" aria-labelledby="guideTitle">
-      <div class="head">
-        <h2 id="guideTitle"></h2>
-        <button type="button" class="btn ghost" id="guideHide"></button>
-      </div>
+      <div class="head"><h2 id="guideTitle"></h2><button type="button" class="btn ghost" id="guideHide" hidden></button></div>
       <ol class="steps" id="steps"></ol>
     </section>
+  </div>
+
+  <main class="grid" id="viewTimer">
+
 
     <section class="card timer" aria-labelledby="todayLabel">
       <div class="chips">
@@ -130,22 +147,21 @@
 
     <section class="card span" id="settingsCard" aria-labelledby="setTitle">
       <div class="head"><h2 id="setTitle"></h2></div>
-      <div class="settings">
-        <div class="field">
-          <label for="examDate" id="examDateLabel"></label>
-          <input type="date" class="input" id="examDate">
+      <div class="setlist">
+        <div class="setrow">
+          <div class="settext"><label for="examDate" id="examDateLabel"></label></div>
+          <div class="setctl"><input type="date" class="input" id="examDate"></div>
         </div>
-        <div class="field account" id="accountBox">
-          <label id="accountLabel"></label>
-          <p id="accountNote"></p>
-          <div class="row-form">
+        <div class="setrow" id="accountBox">
+          <div class="settext"><span class="st" id="accountLabel"></span><p id="accountNote"></p></div>
+          <div class="setctl">
             <button type="button" class="btn" id="googleBtn"></button>
             <button type="button" class="btn ghost" id="signOutBtn" hidden></button>
           </div>
         </div>
-        <div class="field">
-          <label id="resetLabel"></label>
-          <div><button type="button" class="btn ghost" id="resetBtn"></button></div>
+        <div class="setrow">
+          <div class="settext"><span class="st" id="resetLabel"></span></div>
+          <div class="setctl"><button type="button" class="btn ghost danger" id="resetBtn"></button></div>
         </div>
       </div>
     </section>
@@ -153,7 +169,7 @@
 
   <footer>
     <p id="footer"></p>
-    <p class="links" style="justify-content:center"><a href="privacy.html" id="privacyLink"></a><a href="terms.html" id="termsLink"></a></p>
+    <p class="links" style="justify-content:center"><a href="privacy.html" id="privacyLink"></a><a href="terms.html" id="termsLink"></a><a href="home/contact.html" id="sugLink">Suggestions</a><a href="home/" id="webLink">Website</a></p>
   </footer>
 </div>
 
@@ -191,9 +207,46 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="clock.js"></script>
-<script src="firebase-config.js"></script>
-<script src="i18n.js"></script>
-<script src="app.js"></script>
+<script src="clock.js?v=30"></script>
+<script src="firebase-config.js?v=30"></script>
+<script src="i18n.js?v=30"></script>
+<script src="install-sheet.js?v=30"></script>
+<script src="app.js?v=30"></script>
+<script src="home/filter.js?v=30"></script>
+<script src="community-text.js?v=30"></script>
+<script src="community.js?v=30"></script>
+<script src="guide.js?v=30"></script>
+<script>
+/* Small menu under the header: Timer / Chat / How to use. Everything stays inside the app. */
+(function(){
+  var L = {en:["⏱ Timer","💬 Chat","📖 How to use","Website","Suggestions"], hi:["⏱ टाइमर","💬 बातचीत","📖 गाइड","वेबसाइट","सुझाव भेजें"],
+    bn:["⏱ টাইমার","💬 আড্ডা","📖 গাইড","ওয়েবসাইট","পরামর্শ পাঠাও"], te:["⏱ టైమర్","💬 చాట్","📖 ఎలా వాడాలి","వెబ్‌సైట్","సూచనలు పంపండి"],
+    mr:["⏱ टायमर","💬 गप्पा","📖 कसे वापरावे","वेबसाइट","सूचना पाठवा"], ta:["⏱ டைமர்","💬 அரட்டை","📖 வழிகாட்டி","இணையதளம்","பரிந்துரை அனுப்புங்கள்"], ko:["⏱ 타이머","💬 소통","📖 이용 방법","홈페이지","의견 보내기"]};
+  var tabs = document.querySelectorAll(".apptabs a");
+  var views = {timer: document.getElementById("viewTimer"), chat: document.getElementById("viewChat"), how: document.getElementById("viewHow")};
+  var mounted = false;
+  function labels(){
+    var l = (document.documentElement.lang || "en").slice(0,2), t = L[l] || L.en;
+    for (var i = 0; i < tabs.length; i++) tabs[i].textContent = t[i];
+    document.getElementById("sugLink").textContent = t[4];
+    document.getElementById("webLink").textContent = t[3];
+    var P = window.PCT || {}, c = P[l] || P.en || {};
+    document.getElementById("chatTitle").textContent = c.comT || "";
+    document.getElementById("chatLead").textContent = c.comIntro || "";
+  }
+  function show(){
+    var v = (location.hash || "").replace("#","");
+    if (!views[v]) v = "timer";
+    for (var k in views) views[k].hidden = k !== v;
+    for (var i = 0; i < tabs.length; i++) { if (tabs[i].dataset.view === v) tabs[i].setAttribute("aria-current","page"); else tabs[i].removeAttribute("aria-current"); }
+    if (v === "how" && !window.__howMounted){ window.__howMounted = true; PadhaiGuide.mount(document.getElementById("howMount")); }
+    if (v === "chat" && !mounted){ mounted = true; PadhaiCommunity.mount(document.getElementById("community"), {signIn: false}); }
+    window.scrollTo(0, 0);
+  }
+  labels(); show();
+  window.addEventListener("hashchange", show);
+  new MutationObserver(labels).observe(document.documentElement, {attributes:true, attributeFilter:["lang"]});
+})();
+</script>
 </body>
 </html>

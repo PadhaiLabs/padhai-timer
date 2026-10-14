@@ -3,7 +3,7 @@
 **Study together. Track every minute.**
 A free, open-source study timer for Indian exam aspirants: NEET, JEE, UPSC, SSC, Bank and CA.
 
-**Live app:** https://padhai-timer.netlify.app
+**Live app:** https://padhaitimer.com  ·  **Website:** https://padhaitimer.com/home/
 
 Inspired by the study-timer apps Korean students use every day: you start a timer for a subject, and you can see who else is studying right now.
 
@@ -17,6 +17,7 @@ Inspired by the study-timer apps Korean students use every day: you start a time
 - **Fair play** – a "Still studying?" check every 90 minutes; the timer pauses if nobody answers
 - **7 languages** – English, हिन्दी, বাংলা, తెలుగు, मराठी, தமிழ், 한국어
 - **No download needed** – works in the browser, can be installed as an app (PWA), light on low-end phones
+- **Study chat** – a simple feed for aspirants. Bad words, phone numbers and links are blocked automatically, 3 reports hide a post, posts disappear after 30 days
 - **Privacy first** – no phone number, no ads, no payments. Others see only your nickname, exam and today's study time
 
 ## How it is built
@@ -31,6 +32,10 @@ Plain HTML, CSS and JavaScript – no build step.
 | `clock.js` | Corrects wrong device clocks using the server time |
 | `firebase-config.js` | Your Firebase settings (empty = demo mode) |
 | `firestore.rules` | Database security rules |
+| `guide.js` | Step-by-step guide (shared by the app and the website) |
+| `community.js`, `community-text.js`, `home/filter.js` | Study chat (shared by the app and the website) and its word filter |
+| `home/` | Website: landing page, how-to, why, stories, chat, suggestions |
+| `install.html` | Install guide for Android, iPhone, in-app browsers and desktop |
 | `sw.js`, `manifest.json`, `icons/` | Offline support and app install |
 
 Backend: Firebase Authentication (anonymous + Google) and Cloud Firestore.
@@ -39,7 +44,7 @@ Backend: Firebase Authentication (anonymous + Google) and Cloud Firestore.
 
 1. **Demo mode** – open `index.html` with any local web server (for example `npx serve .`). Everything works on one device with sample students.
 2. **Live mode** – create a Firebase project, enable Anonymous and Google sign-in, create a Firestore database, publish `firestore.rules`, then paste your web app config into `firebase-config.js`.
-3. Deploy the folder to any static host (Netlify, Firebase Hosting, GitHub Pages) and add that domain to Firebase Authentication → Authorized domains.
+3. Deploy the folder to any static host (Cloudflare Pages, Netlify, Firebase Hosting, GitHub Pages) and add that domain to Firebase Authentication → Authorized domains.
 
 ## Contributing
 

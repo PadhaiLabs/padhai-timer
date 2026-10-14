@@ -12,7 +12,7 @@ const SUBJ_ROWS = {
   Optional:["वैकल्पिक विषय","ঐচ্ছিক বিষয়","ఆప్షనల్","वैकल्पिक विषय","விருப்பப் பாடம்","선택과목"],
   "Current Affairs":["करंट अफेयर्स","সাম্প্রতিক ঘটনা","కరెంట్ అఫైర్స్","चालू घडामोडी","நடப்பு நிகழ்வுகள்","시사"],
   "Answer Writing":["उत्तर लेखन","উত্তর লেখা","సమాధాన రచన","उत्तर लेखन","விடை எழுதுதல்","답안 작성"],
-  Quant:["क्वांट","গাণিতিক দক্ষতা","క్వాంట్","संख्यात्मक अभियोग्यता","அளவியல்","수리"],
+  Quant:["क्वांट","গাণিতিক দক্ষতা","క్వాంట్","संख्यात्मक अभियोग्यता","கணிதத் திறன்","수리"],
   Reasoning:["रीज़निंग","রিজনিং","రీజనింగ్","तर्कशक्ती","தர்க்கம்","추리"],
   English:["अंग्रेज़ी","ইংরেজি","ఇంగ్లీష్","इंग्रजी","ஆங்கிலம்","영어"],
   GA:["सामान्य जागरूकता","সাধারণ জ্ঞান","జనరల్ అవేర్‌నెస్","सामान्य ज्ञान","பொது விழிப்புணர்வு","일반상식"],
@@ -45,8 +45,8 @@ const T = {
     week:"This week", weekSub:"Hours studied per day", weekEmpty:"Your daily hours appear here once you study.",
     settings:"Settings", examDate:"Exam date (for the D-day count)", reset:"Erase my study log",
     resetBtn:"Erase log", resetConfirm:"Tap again to erase everything",
-    sampleText:"You're looking at a sample week so you can see how it works.", clearSample:"Clear sample and start fresh",
-    footer:"Your study log stays on this device and your account. Modelled on Korea's Yeolpumta (YPT) study timer.",
+    sampleText:"This is an example week (not real data) so you can see how it looks. It disappears when you tap a subject and start.", clearSample:"Clear sample and start fresh",
+    footer:"Your study log stays on this device and your account. Inspired by the way Korean students study together.",
     guideTitle:"How Padhai Timer works", guideHide:"Hide guide", guideShow:"How it works",
     steps:[
       ["Pick your exam","Choose NEET, JEE, UPSC or another exam at the top. Your subjects appear automatically."],
@@ -68,24 +68,24 @@ const T = {
     hallNoteRead:"आप हॉल देख सकते हैं। जुड़ने के लिए मालिक से Contributor एक्सेस माँगें।",
     hallEmpty:"आज अभी किसी ने पढ़ाई शुरू नहीं की। टाइमर चालू करें और पहला स्थान लें।",
     nick:"हॉल में आपका निकनेम", save:"सेव करें",
-    plan:"10 मिनट प्लानर", planSub:"हर खाना 10 मिनट है। रंग विषय बताता है।",
+    plan:"10 मिनट प्लानर", planSub:"हर डिब्बा 10 मिनट का है। रंग से विषय पता चलता है।",
     week:"इस हफ़्ते", weekSub:"हर दिन कितने घंटे पढ़े", weekEmpty:"पढ़ाई शुरू करते ही रोज़ के घंटे यहाँ दिखेंगे।",
     settings:"सेटिंग्स", examDate:"परीक्षा की तारीख (D-day के लिए)", reset:"मेरा रिकॉर्ड मिटाएँ",
     resetBtn:"रिकॉर्ड मिटाएँ", resetConfirm:"सब मिटाने के लिए फिर से दबाएँ",
-    sampleText:"यह नमूना हफ़्ता है ताकि आप देख सकें कि यह कैसे काम करता है।", clearSample:"नमूना हटाएँ और नई शुरुआत करें",
-    footer:"आपका रिकॉर्ड इसी डिवाइस और आपके खाते में रहता है। कोरिया के Yeolpumta (YPT) टाइमर पर आधारित।",
+    sampleText:"यह एक उदाहरण हफ़्ता है (असली डेटा नहीं), ताकि आप देख सकें कि यह कैसा दिखता है। विषय दबाकर शुरू करते ही यह हट जाएगा।", clearSample:"नमूना हटाएँ और नई शुरुआत करें",
+    footer:"आपका रिकॉर्ड इसी डिवाइस और आपके खाते में रहता है। कोरियाई छात्रों के साथ पढ़ने के तरीके से प्रेरित।",
     guideTitle:"Padhai Timer कैसे काम करता है", guideHide:"गाइड छुपाएँ", guideShow:"कैसे काम करता है",
     steps:[
       ["अपनी परीक्षा चुनें","ऊपर NEET, JEE, UPSC या कोई और परीक्षा चुनें। आपके विषय अपने आप आ जाएँगे।"],
       ["विषय दबाकर शुरू करें","पढ़ते समय टाइमर चलता है। ब्रेक के लिए फिर से दबाएँ। विषय बदलना बस एक टैप है।"],
       ["स्टडी हॉल से जुड़ें","निकनेम सेट करें। उसी परीक्षा की तैयारी करने वाले सभी देख सकते हैं कि अभी कौन पढ़ रहा है और आज की रैंकिंग क्या है।"],
-      ["अपना दिन भरते देखें","प्लानर का हर 10 मिनट का खाना आपके विषय के रंग से भरता है। D-day देखने के लिए परीक्षा की तारीख डालें।"]
+      ["अपना दिन भरते देखें","प्लानर का हर 10 मिनट का डिब्बा आपके विषय के रंग से भरता है। D-day देखने के लिए परीक्षा की तारीख डालें।"]
     ]
   },
   bn:{
     tagline:"একসাথে পড়ো। প্রতিটি মিনিট গোনো।",
     today:"আজকের পড়া", start:"পড়া শুরু করো", pause:"থামাও", pick:"শুরু করতে নিচে একটি বিষয় বেছে নাও",
-    studying:s=>s+" পড়ছে", resting:"বিরতিতে",
+    studying:s=>s+" পড়া চলছে", resting:"বিরতিতে",
     dday:mkDday("পরীক্ষার দিন","পরীক্ষা শেষ"), setDate:"পরীক্ষার তারিখ দাও",
     streak:n=> n+" দিন টানা",
     hall:"লাইভ স্টাডি হল", hallSub:e=>"আজ "+e+"-এর প্রস্তুতি নিচ্ছে যারা",
@@ -100,7 +100,7 @@ const T = {
     settings:"সেটিংস", examDate:"পরীক্ষার তারিখ (D-day গণনার জন্য)", reset:"আমার রেকর্ড মুছে ফেলো",
     resetBtn:"রেকর্ড মোছো", resetConfirm:"সব মুছতে আবার চাপো",
     sampleText:"কীভাবে কাজ করে দেখাতে একটি নমুনা সপ্তাহ রাখা হয়েছে।", clearSample:"নমুনা মুছে নতুন করে শুরু করো",
-    footer:"তোমার রেকর্ড এই ডিভাইসে আর তোমার অ্যাকাউন্টেই থাকে। কোরিয়ার Yeolpumta (YPT) টাইমারের আদলে তৈরি।",
+    footer:"তোমার রেকর্ড এই ডিভাইসে আর তোমার অ্যাকাউন্টেই থাকে। কোরিয়ার ছাত্রছাত্রীদের একসঙ্গে পড়ার ধরন থেকে অনুপ্রাণিত।",
     guideTitle:"Padhai Timer কীভাবে কাজ করে", guideHide:"গাইড লুকাও", guideShow:"কীভাবে কাজ করে",
     steps:[
       ["পরীক্ষা বেছে নাও","উপরে NEET, JEE, UPSC বা অন্য পরীক্ষা বেছে নাও। বিষয়গুলো নিজে থেকেই চলে আসবে।"],
@@ -127,7 +127,7 @@ const T = {
     settings:"సెట్టింగ్స్", examDate:"పరీక్ష తేదీ (D-day లెక్క కోసం)", reset:"నా రికార్డు తొలగించండి",
     resetBtn:"రికార్డు తొలగించు", resetConfirm:"అన్నీ తొలగించడానికి మళ్లీ నొక్కండి",
     sampleText:"ఇది ఎలా పనిచేస్తుందో చూపించడానికి నమూనా వారం ఉంచాము.", clearSample:"నమూనా తీసేసి కొత్తగా ప్రారంభించండి",
-    footer:"మీ రికార్డు ఈ పరికరంలో మరియు మీ ఖాతాలోనే ఉంటుంది. కొరియాలోని Yeolpumta (YPT) టైమర్ ఆధారంగా రూపొందించబడింది.",
+    footer:"మీ రికార్డు ఈ పరికరంలో మరియు మీ ఖాతాలోనే ఉంటుంది. కొరియా విద్యార్థులు కలిసి చదివే పద్ధతి స్ఫూర్తితో.",
     guideTitle:"Padhai Timer ఎలా పనిచేస్తుంది", guideHide:"గైడ్ దాచు", guideShow:"ఎలా పనిచేస్తుంది",
     steps:[
       ["మీ పరీక్ష ఎంచుకోండి","పైన NEET, JEE, UPSC లేదా ఇతర పరీక్ష ఎంచుకోండి. మీ సబ్జెక్టులు ఆటోమేటిక్‌గా వస్తాయి."],
@@ -154,7 +154,7 @@ const T = {
     settings:"सेटिंग्ज", examDate:"परीक्षेची तारीख (D-day मोजण्यासाठी)", reset:"माझी नोंद पुसून टाका",
     resetBtn:"नोंद पुसा", resetConfirm:"सर्व पुसण्यासाठी पुन्हा दाबा",
     sampleText:"हे कसे काम करते ते दाखवण्यासाठी नमुना आठवडा ठेवला आहे.", clearSample:"नमुना काढा आणि नव्याने सुरू करा",
-    footer:"तुमची नोंद याच डिव्हाइसवर आणि तुमच्या खात्यात राहते. कोरियाच्या Yeolpumta (YPT) टायमरवर आधारित.",
+    footer:"तुमची नोंद याच डिव्हाइसवर आणि तुमच्या खात्यात राहते. कोरियन विद्यार्थी एकत्र अभ्यास करतात त्या पद्धतीपासून प्रेरित.",
     guideTitle:"Padhai Timer कसे काम करते", guideHide:"मार्गदर्शक लपवा", guideShow:"कसे काम करते",
     steps:[
       ["तुमची परीक्षा निवडा","वर NEET, JEE, UPSC किंवा दुसरी परीक्षा निवडा. तुमचे विषय आपोआप येतील."],
@@ -181,7 +181,7 @@ const T = {
     settings:"அமைப்புகள்", examDate:"தேர்வு தேதி (D-day கணக்கிற்கு)", reset:"என் பதிவை அழி",
     resetBtn:"பதிவை அழி", resetConfirm:"அனைத்தையும் அழிக்க மீண்டும் அழுத்துங்கள்",
     sampleText:"இது எப்படி வேலை செய்கிறது என்று காட்ட ஒரு மாதிரி வாரம் உள்ளது.", clearSample:"மாதிரியை நீக்கி புதிதாகத் தொடங்கு",
-    footer:"உங்கள் பதிவு இந்தச் சாதனத்திலும் உங்கள் கணக்கிலும் மட்டுமே இருக்கும். கொரியாவின் Yeolpumta (YPT) டைமரை அடிப்படையாகக் கொண்டது.",
+    footer:"உங்கள் பதிவு இந்தச் சாதனத்திலும் உங்கள் கணக்கிலும் மட்டுமே இருக்கும். கொரிய மாணவர்கள் சேர்ந்து படிக்கும் முறையால் ஈர்க்கப்பட்டது.",
     guideTitle:"Padhai Timer எப்படி வேலை செய்கிறது", guideHide:"வழிகாட்டியை மறை", guideShow:"எப்படி வேலை செய்கிறது",
     steps:[
       ["உங்கள் தேர்வைத் தேர்ந்தெடுங்கள்","மேலே NEET, JEE, UPSC அல்லது வேறு தேர்வைத் தேர்ந்தெடுங்கள். உங்கள் பாடங்கள் தானாக வரும்."],
@@ -207,8 +207,8 @@ const T = {
     week:"이번 주", weekSub:"하루 공부 시간", weekEmpty:"공부를 시작하면 하루 공부 시간이 여기에 쌓여요.",
     settings:"설정", examDate:"시험 날짜 (D-day 계산용)", reset:"내 공부 기록 지우기",
     resetBtn:"기록 지우기", resetConfirm:"한 번 더 누르면 모두 지워져요",
-    sampleText:"사용법을 보여드리려고 예시 일주일을 넣어뒀어요.", clearSample:"예시 지우고 새로 시작하기",
-    footer:"공부 기록은 이 기기와 내 계정에만 저장돼요. 한국의 열품타(YPT) 공부 타이머를 참고했어요.",
+    sampleText:"처음 보는 분을 위해 예시 기록(실제 기록 아님)을 보여 드려요. 과목을 눌러 시작하면 사라지고 내 기록이 시작돼요.", clearSample:"예시 지우고 새로 시작하기",
+    footer:"공부 기록은 이 기기와 내 계정에만 저장돼요. 한국 수험생들이 함께 공부하는 방식에서 영감을 받았어요.",
     guideTitle:"Padhai Timer 사용법", guideHide:"가이드 숨기기", guideShow:"사용법",
     steps:[
       ["시험 고르기","위에서 NEET, JEE, UPSC 등 시험을 고르면 과목이 자동으로 나와요."],
@@ -237,7 +237,7 @@ const T2 = {
     privacy:"Privacy policy", terms:"Terms of use",
     account:"Account", saveGoogle:"Save with Google", savedAs:e=>"Saved to "+e, accountNote:"Sign in with Google to keep your log when you change phones.", signOut:"Sign out",
     nickBad:"Please choose a different nickname.", demo:"Demo mode: the study hall is not connected yet. Your log is saved on this device only.",
-    install:"Install app", offline:"You're offline. Your timer still works and will sync later.", erased:"Your data was erased."
+    install:"📱 Install on phone", offline:"You're offline. Your timer still works and will sync later.", erased:"Your data was erased."
   },
   hi:{
     tabGroup:"मेरा ग्रुप", tabAll:e=>"सभी "+e,
@@ -254,7 +254,7 @@ const T2 = {
     privacy:"गोपनीयता नीति", terms:"उपयोग की शर्तें",
     account:"खाता", saveGoogle:"Google से सेव करें", savedAs:e=>e+" में सेव है", accountNote:"फ़ोन बदलने पर भी रिकॉर्ड रखने के लिए Google से साइन इन करें।", signOut:"साइन आउट",
     nickBad:"कृपया कोई दूसरा निकनेम चुनें।", demo:"डेमो मोड: स्टडी हॉल अभी जुड़ा नहीं है। आपका रिकॉर्ड सिर्फ़ इसी डिवाइस पर सेव है।",
-    install:"ऐप इंस्टॉल करें", offline:"आप ऑफ़लाइन हैं। टाइमर चलता रहेगा और बाद में सिंक होगा।", erased:"आपका डेटा मिटा दिया गया।"
+    install:"📱 फ़ोन पर इंस्टॉल करें", offline:"आप ऑफ़लाइन हैं। टाइमर चलता रहेगा और बाद में सिंक होगा।", erased:"आपका डेटा मिटा दिया गया।"
   },
   bn:{
     tabGroup:"আমার গ্রুপ", tabAll:e=>"সব "+e,
@@ -271,7 +271,7 @@ const T2 = {
     privacy:"গোপনীয়তা নীতি", terms:"ব্যবহারের শর্ত",
     account:"অ্যাকাউন্ট", saveGoogle:"Google দিয়ে সেভ করো", savedAs:e=>e+"-এ সেভ আছে", accountNote:"ফোন বদলালেও রেকর্ড রাখতে Google দিয়ে সাইন ইন করো।", signOut:"সাইন আউট",
     nickBad:"অনুগ্রহ করে অন্য ডাকনাম বেছে নাও।", demo:"ডেমো মোড: স্টাডি হল এখনও যুক্ত হয়নি। তোমার রেকর্ড শুধু এই ডিভাইসে সেভ আছে।",
-    install:"অ্যাপ ইনস্টল করো", offline:"তুমি অফলাইন। টাইমার চলবে, পরে সিঙ্ক হবে।", erased:"তোমার ডেটা মুছে ফেলা হয়েছে।"
+    install:"📱 ফোনে ইনস্টল করো", offline:"তুমি অফলাইন। টাইমার চলবে, পরে সিঙ্ক হবে।", erased:"তোমার ডেটা মুছে ফেলা হয়েছে।"
   },
   te:{
     tabGroup:"నా గ్రూప్", tabAll:e=>"అందరూ · "+e,
@@ -288,7 +288,7 @@ const T2 = {
     privacy:"గోప్యతా విధానం", terms:"వినియోగ నిబంధనలు",
     account:"ఖాతా", saveGoogle:"Googleతో సేవ్ చేయండి", savedAs:e=>e+"లో సేవ్ అయింది", accountNote:"ఫోన్ మార్చినా రికార్డు ఉండాలంటే Googleతో సైన్ ఇన్ చేయండి.", signOut:"సైన్ అవుట్",
     nickBad:"దయచేసి వేరే నిక్‌నేమ్ ఎంచుకోండి.", demo:"డెమో మోడ్: స్టడీ హాల్ ఇంకా కనెక్ట్ కాలేదు. మీ రికార్డు ఈ పరికరంలో మాత్రమే ఉంది.",
-    install:"యాప్ ఇన్‌స్టాల్ చేయండి", offline:"మీరు ఆఫ్‌లైన్‌లో ఉన్నారు. టైమర్ పనిచేస్తుంది, తర్వాత సింక్ అవుతుంది.", erased:"మీ డేటా తొలగించబడింది."
+    install:"📱 ఫోన్‌లో ఇన్‌స్టాల్ చేయండి", offline:"మీరు ఆఫ్‌లైన్‌లో ఉన్నారు. టైమర్ పనిచేస్తుంది, తర్వాత సింక్ అవుతుంది.", erased:"మీ డేటా తొలగించబడింది."
   },
   mr:{
     tabGroup:"माझा ग्रुप", tabAll:e=>"सर्व "+e,
@@ -305,7 +305,7 @@ const T2 = {
     privacy:"गोपनीयता धोरण", terms:"वापराच्या अटी",
     account:"खाते", saveGoogle:"Google ने सेव्ह करा", savedAs:e=>e+" मध्ये सेव्ह आहे", accountNote:"फोन बदलला तरी नोंद राहावी म्हणून Google ने साइन इन करा.", signOut:"साइन आउट",
     nickBad:"कृपया दुसरे टोपणनाव निवडा.", demo:"डेमो मोड: स्टडी हॉल अजून जोडलेला नाही. तुमची नोंद फक्त याच डिव्हाइसवर आहे.",
-    install:"ॲप इंस्टॉल करा", offline:"तुम्ही ऑफलाइन आहात. टायमर चालू राहील आणि नंतर सिंक होईल.", erased:"तुमचा डेटा पुसला गेला."
+    install:"📱 फोनवर इंस्टॉल करा", offline:"तुम्ही ऑफलाइन आहात. टायमर चालू राहील आणि नंतर सिंक होईल.", erased:"तुमचा डेटा पुसला गेला."
   },
   ta:{
     tabGroup:"என் குழு", tabAll:e=>"அனைவரும் · "+e,
@@ -322,7 +322,7 @@ const T2 = {
     privacy:"தனியுரிமைக் கொள்கை", terms:"பயன்பாட்டு விதிமுறைகள்",
     account:"கணக்கு", saveGoogle:"Google மூலம் சேமி", savedAs:e=>e+" இல் சேமிக்கப்பட்டது", accountNote:"தொலைபேசியை மாற்றினாலும் பதிவு இருக்க Google மூலம் உள்நுழையுங்கள்.", signOut:"வெளியேறு",
     nickBad:"தயவுசெய்து வேறு புனைப்பெயரைத் தேர்ந்தெடுங்கள்.", demo:"டெமோ முறை: படிப்பு அரங்கம் இன்னும் இணைக்கப்படவில்லை. உங்கள் பதிவு இந்தச் சாதனத்தில் மட்டுமே உள்ளது.",
-    install:"செயலியை நிறுவு", offline:"நீங்கள் ஆஃப்லைனில் உள்ளீர்கள். டைமர் இயங்கும், பின்னர் ஒத்திசைக்கப்படும்.", erased:"உங்கள் தரவு அழிக்கப்பட்டது."
+    install:"📱 போனில் நிறுவுங்கள்", offline:"நீங்கள் ஆஃப்லைனில் உள்ளீர்கள். டைமர் இயங்கும், பின்னர் ஒத்திசைக்கப்படும்.", erased:"உங்கள் தரவு அழிக்கப்பட்டது."
   },
   ko:{
     tabGroup:"내 그룹", tabAll:e=>"전체 "+e,
@@ -339,7 +339,7 @@ const T2 = {
     privacy:"개인정보 처리방침", terms:"이용약관",
     account:"계정", saveGoogle:"Google로 저장", savedAs:e=>e+"에 저장됨", accountNote:"휴대폰을 바꿔도 기록이 남도록 Google로 로그인하세요.", signOut:"로그아웃",
     nickBad:"다른 닉네임을 골라주세요.", demo:"데모 모드: 스터디홀이 아직 연결되지 않았어요. 기록은 이 기기에만 저장돼요.",
-    install:"앱 설치", offline:"오프라인이에요. 타이머는 계속 돌고 나중에 동기화돼요.", erased:"데이터를 지웠어요."
+    install:"📱 폰에 설치하기", offline:"오프라인이에요. 타이머는 계속 돌고 나중에 동기화돼요.", erased:"데이터를 지웠어요."
   }
 };
 for (const l of Object.keys(T)) Object.assign(T[l], T2[l] || {});

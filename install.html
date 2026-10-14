@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Install Padhai Timer</title>
+<meta name="theme-color" content="#2742B5">
+<meta property="og:title" content="Install Padhai Timer">
+<meta property="og:description" content="Put Padhai Timer on your home screen. Free, no Play Store needed.">
+<meta property="og:image" content="https://padhaitimer.com/icons/icon-512.png">
+<meta property="og:url" content="https://padhaitimer.com/install.html">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Mukta:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="home/home.css?v=30">
+<style>
+  .box{background:var(--surface);border:1px solid var(--rule);border-radius:20px;padding:24px;box-shadow:var(--shadow);max-width:560px;margin:24px auto}
+  .box ol{padding-left:22px}.box li{margin:8px 0}
+  .appicon{width:72px;height:72px;border-radius:18px}
+  #qr{display:inline-block;background:#fff;padding:12px;border-radius:12px;margin-top:8px}
+  .safe{list-style:none;padding:0;margin:14px 0;display:grid;gap:6px}.safe li{background:var(--paper);border-radius:10px;padding:8px 12px;font-size:.95rem}
+  .url{font-family:ui-monospace,Menlo,monospace;background:var(--paper);padding:8px 12px;border-radius:8px;word-break:break-all;display:block;margin:10px 0}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="home/"><img src="icons/icon-192.png" alt=""> Padhai Timer</a>
+  <select id="lang" aria-label="Language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="ta">தமிழ்</option><option value="ko">한국어</option></select>
+</div></header>
+<main class="wrap">
+  <div class="box">
+    <img class="appicon" src="icons/icon-192.png" alt="">
+    <h1 style="font-size:1.8rem" data-t="title">Install Padhai Timer</h1>
+    <p class="note" data-t="sub">No Play Store needed. It opens like a normal app from your home screen.</p>
+    <ul class="safe">
+      <li data-t="s1">✓ Not an APK file. Your own Chrome or Safari adds it to your home screen. It's an official browser feature, so no Play Store is needed.</li>
+      <li data-t="s2">✓ No permissions: no contacts, photos, location or camera.</li>
+      <li data-t="s3">✓ Less than 1 MB. Long-press the icon to remove it any time.</li>
+    </ul>
+
+    <!-- Android Chrome -->
+    <div id="android" hidden>
+      <button class="btn primary" id="installNow" data-t="installBtn">Install now</button>
+      <p class="note" id="androidHint" data-t="androidHint">If nothing happens: tap ⋮ (top right) → "Install app" or "Add to Home screen".</p>
+    </div>
+    <!-- Already installed -->
+    <div id="done" hidden><p data-t="done">Installed! Open Padhai Timer from your home screen.</p></div>
+    <!-- iPhone Safari -->
+    <div id="ios" hidden>
+      <ol>
+        <li data-t="ios1">Tap the Share button (square with an arrow) at the bottom.</li>
+        <li data-t="ios2">Scroll and tap "Add to Home Screen".</li>
+        <li data-t="ios3">Tap "Add".</li>
+      </ol>
+      <p class="note" data-t="iosNote">Important: always open Padhai Timer from the new home screen icon. Safari and the icon keep separate records.</p>
+    </div>
+    <!-- Inside WhatsApp / Instagram -->
+    <div id="inapp" hidden>
+      <p data-t="inapp">You opened this inside another app. To install, open it in Chrome (Android) or Safari (iPhone).</p>
+      <span class="url" id="pageUrl"></span>
+      <button class="btn ghost" id="copyBtn" data-t="copy">Copy link</button>
+      <p class="note" data-t="inappHint">Or tap ⋮ / ··· → "Open in browser".</p>
+    </div>
+    <!-- Computer -->
+    <div id="desktop" hidden>
+      <p data-t="desktop">Scan this with your phone camera to open it on your phone:</p>
+      <div id="qr"></div>
+      <span class="url">https://padhaitimer.com/install.html</span>
+    </div>
+
+    <p style="margin-top:20px"><a class="btn ghost small" href="./" data-t="useNow">Or just use it in the browser</a></p>
+  </div>
+</main>
+<script src="qr.js?v=30"></script>
+<script>
+(function(){
+var T={"hi": {"title": "Padhai Timer इंस्टॉल करें", "sub": "Play Store ज़रूरी नहीं। होम स्क्रीन से आम ऐप की तरह खुलता है।", "s1": "✓ यह APK फ़ाइल नहीं है। आपका अपना Chrome या Safari इसे होम स्क्रीन पर जोड़ता है। यह ब्राउज़र का आधिकारिक फ़ीचर है, इसलिए Play Store की ज़रूरत नहीं।", "s2": "✓ कोई परमिशन नहीं: कॉन्टैक्ट, फ़ोटो, लोकेशन या कैमरा नहीं।", "s3": "✓ 1 MB से कम। आइकन दबाकर रखें और कभी भी हटा दें।", "installBtn": "अभी इंस्टॉल करें", "androidHint": "अगर कुछ न हो: ऊपर दाईं ओर ⋮ → \"Install app\" या \"Add to Home screen\" दबाएँ।", "done": "इंस्टॉल हो गया! होम स्क्रीन से Padhai Timer खोलें।", "ios1": "नीचे Share बटन (तीर वाला चौकोर) दबाएँ।", "ios2": "नीचे स्क्रॉल करके \"Add to Home Screen\" दबाएँ।", "ios3": "\"Add\" दबाएँ।", "iosNote": "ज़रूरी: हमेशा होम स्क्रीन के नए आइकन से खोलें। Safari और आइकन के रिकॉर्ड अलग रहते हैं।", "inapp": "आपने इसे किसी दूसरे ऐप के अंदर खोला है। इंस्टॉल करने के लिए Chrome (Android) या Safari (iPhone) में खोलें।", "copy": "लिंक कॉपी करें", "inappHint": "या ⋮ / ··· → \"Open in browser\" दबाएँ।", "desktop": "फ़ोन पर खोलने के लिए फ़ोन के कैमरे से यह स्कैन करें:", "useNow": "या सीधे ब्राउज़र में इस्तेमाल करें"}, "ko": {"title": "Padhai Timer 폰에 설치하기", "sub": "플레이스토어가 필요 없어요. 홈 화면에서 일반 앱처럼 열려요.", "s1": "✓ APK 파일이 아니에요. 내 폰의 Chrome이나 Safari가 홈 화면에 붙여 줘요. 브라우저에 원래 있는 공식 기능이라 플레이스토어가 필요 없어요.", "s2": "✓ 권한 요구 없음: 연락처, 사진, 위치, 카메라를 안 써요.", "s3": "✓ 1MB도 안 돼요. 아이콘을 꾹 눌러 언제든 지울 수 있어요.", "installBtn": "지금 설치하기", "androidHint": "아무 반응이 없으면: 오른쪽 위 ⋮ → \"앱 설치\" 또는 \"홈 화면에 추가\"를 누르세요.", "done": "설치됐어요! 홈 화면에서 Padhai Timer를 여세요.", "ios1": "아래쪽 공유 버튼(화살표가 있는 네모)을 눌러요.", "ios2": "아래로 내려서 \"홈 화면에 추가\"를 눌러요.", "ios3": "\"추가\"를 눌러요.", "iosNote": "중요: 항상 새로 생긴 홈 화면 아이콘으로 여세요. Safari와 아이콘의 기록은 따로 저장돼요.", "inapp": "다른 앱 안에서 열었어요. 설치하려면 Chrome(안드로이드)이나 Safari(아이폰)에서 열어 주세요.", "copy": "링크 복사", "inappHint": "또는 ⋮ / ··· → \"브라우저에서 열기\"를 누르세요.", "desktop": "폰 카메라로 이걸 찍으면 폰에서 열려요:", "useNow": "아니면 그냥 브라우저에서 쓰기"}, "bn": {"title": "Padhai Timer ফোনে ইনস্টল করো", "sub": "Play Store লাগে না। হোম স্ক্রিন থেকে সাধারণ অ্যাপের মতো খোলে।", "androidHint": "কিছু না হলে: উপরে ডানদিকে ⋮ → \"Install app\" বা \"Add to Home screen\" চাপো।", "done": "ইনস্টল হয়ে গেছে! হোম স্ক্রিন থেকে Padhai Timer খোলো।", "ios1": "নিচে Share বোতাম (তীর-চিহ্নওয়ালা চৌকো) চাপো।", "ios2": "নিচে স্ক্রল করে \"Add to Home Screen\" চাপো।", "ios3": "\"Add\" চাপো।", "iosNote": "জরুরি: সবসময় হোম স্ক্রিনের নতুন আইকন থেকে খোলো। Safari আর আইকনের রেকর্ড আলাদা থাকে।", "inapp": "তুমি এটা অন্য একটা অ্যাপের ভেতরে খুলেছ। ইনস্টল করতে Chrome (Android) বা Safari (iPhone)-তে খোলো।", "copy": "লিংক কপি করো", "inappHint": "অথবা ⋮ / ··· → \"Open in browser\" চাপো।", "desktop": "ফোনে খুলতে ফোনের ক্যামেরা দিয়ে এটা স্ক্যান করো:", "useNow": "অথবা সরাসরি ব্রাউজারে ব্যবহার করো", "s1": "✓ এটা APK ফাইল নয়। তোমার নিজের Chrome বা Safari এটা হোম স্ক্রিনে যোগ করে। এটা ব্রাউজারের অফিসিয়াল ফিচার, তাই Play Store লাগে না।", "s2": "✓ কোনো পারমিশন লাগে না: কন্ট্যাক্ট, ছবি, লোকেশন বা ক্যামেরা নয়।", "s3": "✓ 1 MB-এর কম। আইকন চেপে ধরে যেকোনো সময় মুছে ফেলো।", "installBtn": "এখনই ইনস্টল করো"}, "te": {"title": "Padhai Timer ఫోన్‌లో ఇన్‌స్టాల్ చేయండి", "sub": "Play Store అవసరం లేదు. హోమ్ స్క్రీన్ నుండి సాధారణ యాప్‌లా తెరుచుకుంటుంది.", "androidHint": "ఏమీ జరగకపోతే: పైన కుడివైపు ⋮ → \"Install app\" లేదా \"Add to Home screen\" నొక్కండి.", "done": "ఇన్‌స్టాల్ అయింది! హోమ్ స్క్రీన్ నుండి Padhai Timer తెరవండి.", "ios1": "కింద Share బటన్ (బాణం ఉన్న చతురస్రం) నొక్కండి.", "ios2": "కిందకు స్క్రోల్ చేసి \"Add to Home Screen\" నొక్కండి.", "ios3": "\"Add\" నొక్కండి.", "iosNote": "ముఖ్యం: ఎప్పుడూ హోమ్ స్క్రీన్‌లోని కొత్త ఐకాన్ నుండే తెరవండి. Safari, ఐకాన్ రికార్డులు వేరుగా ఉంటాయి.", "inapp": "మీరు దీన్ని వేరే యాప్ లోపల తెరిచారు. ఇన్‌స్టాల్ చేయడానికి Chrome (Android) లేదా Safari (iPhone)లో తెరవండి.", "copy": "లింక్ కాపీ చేయండి", "inappHint": "లేదా ⋮ / ··· → \"Open in browser\" నొక్కండి.", "desktop": "ఫోన్‌లో తెరవడానికి ఫోన్ కెమెరాతో దీన్ని స్కాన్ చేయండి:", "useNow": "లేదా నేరుగా బ్రౌజర్‌లో వాడండి", "s1": "✓ ఇది APK ఫైల్ కాదు. మీ Chrome లేదా Safari దీన్ని హోమ్ స్క్రీన్‌కు జోడిస్తుంది. ఇది బ్రౌజర్ అధికారిక ఫీచర్, కాబట్టి Play Store అవసరం లేదు.", "s2": "✓ ఏ అనుమతులూ అడగదు: కాంటాక్ట్స్, ఫోటోలు, లొకేషన్, కెమెరా ఏవీ వాడదు.", "s3": "✓ 1 MB కంటే తక్కువ. ఐకాన్‌ను నొక్కి పట్టి ఎప్పుడైనా తీసేయవచ్చు.", "installBtn": "ఇప్పుడే ఇన్‌స్టాల్ చేయండి"}, "mr": {"title": "Padhai Timer फोनवर इंस्टॉल करा", "sub": "Play Store ची गरज नाही. होम स्क्रीनवरून साध्या ॲपसारखं उघडतं.", "androidHint": "काही झालं नाही तर: वर उजवीकडे ⋮ → \"Install app\" किंवा \"Add to Home screen\" दाबा.", "done": "इंस्टॉल झालं! होम स्क्रीनवरून Padhai Timer उघडा.", "ios1": "खाली Share बटण (बाण असलेला चौकोन) दाबा.", "ios2": "खाली स्क्रोल करून \"Add to Home Screen\" दाबा.", "ios3": "\"Add\" दाबा.", "iosNote": "महत्त्वाचं: नेहमी होम स्क्रीनवरच्या नव्या आयकॉनमधून उघडा. Safari आणि आयकॉनचे रेकॉर्ड वेगळे राहतात.", "inapp": "तुम्ही हे दुसऱ्या ॲपमध्ये उघडलं आहे. इंस्टॉल करण्यासाठी Chrome (Android) किंवा Safari (iPhone) मध्ये उघडा.", "copy": "लिंक कॉपी करा", "inappHint": "किंवा ⋮ / ··· → \"Open in browser\" दाबा.", "desktop": "फोनवर उघडण्यासाठी फोनच्या कॅमेऱ्याने हे स्कॅन करा:", "useNow": "किंवा थेट ब्राउझरमध्ये वापरा", "s1": "✓ ही APK फाइल नाही. तुमचा स्वतःचा Chrome किंवा Safari हे होम स्क्रीनवर जोडतो. हे ब्राउझरचं अधिकृत फीचर आहे, म्हणून Play Store ची गरज नाही.", "s2": "✓ कोणतीही परवानगी नाही: कॉन्टॅक्ट, फोटो, लोकेशन किंवा कॅमेरा नाही.", "s3": "✓ 1 MB पेक्षा कमी. आयकॉन दाबून धरा आणि कधीही काढून टाका.", "installBtn": "आत्ता इंस्टॉल करा"}, "ta": {"title": "Padhai Timer-ஐ போனில் நிறுவுங்கள்", "sub": "Play Store தேவையில்லை. முகப்புத் திரையிலிருந்து சாதாரண செயலி போல திறக்கும்.", "androidHint": "எதுவும் நடக்கவில்லை என்றால்: மேலே வலதுபுறம் ⋮ → \"Install app\" அல்லது \"Add to Home screen\" அழுத்துங்கள்.", "done": "நிறுவப்பட்டது! முகப்புத் திரையிலிருந்து Padhai Timer-ஐத் திறங்கள்.", "ios1": "கீழே உள்ள Share பொத்தானை (அம்புக்குறி உள்ள சதுரம்) அழுத்துங்கள்.", "ios2": "கீழே உருட்டி \"Add to Home Screen\" அழுத்துங்கள்.", "ios3": "\"Add\" அழுத்துங்கள்.", "iosNote": "முக்கியம்: எப்போதும் முகப்புத் திரையின் புதிய ஐகானிலிருந்தே திறங்கள். Safari, ஐகான் பதிவுகள் தனித்தனியாக இருக்கும்.", "inapp": "இதை வேறொரு செயலிக்குள் திறந்துள்ளீர்கள். நிறுவ Chrome (Android) அல்லது Safari (iPhone)-இல் திறங்கள்.", "copy": "இணைப்பை நகலெடு", "inappHint": "அல்லது ⋮ / ··· → \"Open in browser\" அழுத்துங்கள்.", "desktop": "போனில் திறக்க போன் கேமராவால் இதை ஸ்கேன் செய்யுங்கள்:", "useNow": "அல்லது நேரடியாக உலாவியில் பயன்படுத்துங்கள்", "s1": "✓ இது APK கோப்பு அல்ல. உங்கள் Chrome அல்லது Safari இதை முகப்புத் திரையில் சேர்க்கிறது. இது உலாவியின் அதிகாரப்பூர்வ வசதி, அதனால் Play Store தேவையில்லை.", "s2": "✓ எந்த அனுமதியும் கேட்காது: தொடர்புகள், புகைப்படங்கள், இருப்பிடம், கேமரா எதையும் பயன்படுத்தாது.", "s3": "✓ 1 MB-க்கும் குறைவு. ஐகானை அழுத்திப் பிடித்து எப்போது வேண்டுமானாலும் நீக்கலாம்.", "installBtn": "இப்போதே நிறுவுங்கள்"}};
+var nodes=document.querySelectorAll("[data-t]"),EN={};nodes.forEach(function(n){EN[n.dataset.t]=n.textContent;});
+function apply(l){var d=T[l]||{};nodes.forEach(function(n){n.textContent=d[n.dataset.t]||EN[n.dataset.t];});document.documentElement.lang=l;try{localStorage.setItem("padhai.homeLang",l);}catch(e){}}
+var sel=document.getElementById("lang"),saved=null;try{saved=localStorage.getItem("padhai.homeLang");}catch(e){}
+var appLang=null;try{appLang=(JSON.parse(localStorage.getItem("padhai.v2")||"{}")||{}).lang;}catch(e){}
+var start=new URLSearchParams(location.search).get("lang")||saved||appLang||(navigator.language||"").slice(0,2);if(!T[start])start="en";sel.value=start;apply(start);
+sel.addEventListener("change",function(){apply(sel.value);});
+
+var ua=navigator.userAgent||"",$=function(id){return document.getElementById(id);};
+var standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+var inApp=/FBAN|FBAV|Instagram|WhatsApp|Line\/|Snapchat|; wv\)/i.test(ua);
+var ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+var mobile=ios||/Android|Mobi/i.test(ua);
+var url=location.href.split("#")[0];
+if(standalone){$("done").hidden=false;}
+else if(inApp){$("inapp").hidden=false;$("pageUrl").textContent=url;}
+else if(ios){$("ios").hidden=false;}
+else if(mobile){$("android").hidden=false;}
+else{$("desktop").hidden=false;try{var g=qrcode(0,"M");g.addData("https://padhaitimer.com/install.html?src=qr");g.make();$("qr").innerHTML=g.createSvgTag({cellSize:5,margin:2,scalable:true});$("qr").firstChild.style.width=$("qr").firstChild.style.height="180px";}catch(e){}}
+
+var evt=null;
+window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();evt=e;if(!standalone&&!inApp)$("android").hidden=false;});
+$("installNow").addEventListener("click",function(){
+  if(evt){evt.prompt();evt.userChoice.then(function(r){if(r.outcome==="accepted"){$("android").hidden=true;$("done").hidden=false;}evt=null;});}
+  else{$("androidHint").style.fontWeight="700";}
+});
+window.addEventListener("appinstalled",function(){$("android").hidden=true;$("done").hidden=false;});
+$("copyBtn").addEventListener("click",function(){
+  var b=this;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(function(){b.textContent="✓";},function(){prompt("",url);});
+});
+if("serviceWorker" in navigator&&location.protocol==="https:"){navigator.serviceWorker.register("sw.js").catch(function(){});}
+})();
+</script>
+</body>
+</html>
